@@ -13,10 +13,8 @@ class Task(Base):
     content = Column(String)
     priority = Column(Integer, default=0)
     completed = Column(Boolean, default=False)
-#    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.id'), index=True)
+    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True, index=True)
     slug = Column(String, unique=True, index=True)
-
     user = relationship('User', back_populates='tasks')
 
 

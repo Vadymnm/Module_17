@@ -9,18 +9,20 @@ class CreateUser(BaseModel):
     age:  int
 
 class UpdateUser(BaseModel):
-# username: str
     firstname: str
     lastname: str
     age: int
 
 
 class CreateTask(BaseModel):
+    id: int
     title:  str
     content: str
     priority:  int
 
+
 class UpdateTask(BaseModel):
+    id: int
     title:  str
     content: str
     priority: int
