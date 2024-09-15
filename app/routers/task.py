@@ -25,6 +25,7 @@ async def all_tasks(db: Annotated[Session, Depends(get_db)]):
 @router.get("/by_task_id")
 async def task_by_id(db: Annotated[Session, Depends(get_db)], task_id: int):
     task = db.scalar(select(Task).where(Task.id == task_id))
+    print('task = ', task)
     if task is None:
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -32,16 +33,26 @@ async def task_by_id(db: Annotated[Session, Depends(get_db)], task_id: int):
         )
     return task
 
-
 @router.get("/by_user_id")
 async def task_by_user_id(db: Annotated[Session, Depends(get_db)], user_id: int):
     tasks = db.scalars(select(Task).where(Task.user_id == user_id)).all()
-    if tasks is None:
+    if len(tasks) == 0:
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='Task not found'
+            detail='Task with current user_id not found'
         )
     return tasks
+
+# @router.get("/by_user_id")
+# async def task_by_user_id(db: Annotated[Session, Depends(get_db)], user_id: int):
+#     tasks = db.scalars(select(Task).where(Task.user_id == user_id)).all
+# #    tasks = db.scalars(select(Task).where(Task.user_id == user_id)).all()
+#     if tasks is None:
+#         return HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail='Task not found'
+#         )
+#     return tasks
 
 @router.post("/create")
 async def create_task(db: Annotated[Session, Depends(get_db)], create_task: CreateTask, user_id):
