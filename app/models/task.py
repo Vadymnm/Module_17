@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import CreateTable
 
 from app.backend.db import Base
-from app.models import *
 
 
 class Task(Base):

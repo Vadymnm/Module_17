@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 from typing import Annotated
 from sqlalchemy import insert, select, update, delete
 from slugify import slugify
-
 from app.models import *
 from app.backend.db_depends import get_db
 from app.schemas import CreateUser, UpdateUser
@@ -73,12 +72,6 @@ async def delete_user(db: Annotated[Session, Depends(get_db)], user_id: int):
             status_code=status.HTTP_404_NOT_FOUND,
             detail='User not found')
     db.execute(delete(User).where(User.id == user_id))
-# ----------  таблица task  ----------------------
-    tasks_delete = db.scalars(select(Task).where(Task.user_id == user_id)).all()
-    if tasks_delete is None:
-        return HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='User_id in Task not found' )
     db.execute(delete(Task).where(Task.user_id == user_id))
     db.commit()
     return {'status_code': status.HTTP_200_OK,

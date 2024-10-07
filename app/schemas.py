@@ -8,6 +8,7 @@ class CreateUser(BaseModel):
     slug: str
     age:  int
 
+
 class UpdateUser(BaseModel):
     firstname: str
     lastname: str
