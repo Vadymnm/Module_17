@@ -14,7 +14,7 @@ router = APIRouter(prefix="/task", tags=["task"])
 async def all_tasks(db: Annotated[Session, Depends(get_db)]):
     tasks = db.scalars(select(Task)).all()
     if tasks is None:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='There are no tasks'
         )
@@ -26,7 +26,7 @@ async def task_by_id(db: Annotated[Session, Depends(get_db)], task_id: int):
     task = db.scalar(select(Task).where(Task.id == task_id))
     print('task = ', task)
     if task is None:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='Task not found'
         )
@@ -37,7 +37,7 @@ async def task_by_id(db: Annotated[Session, Depends(get_db)], task_id: int):
 async def task_by_user_id(db: Annotated[Session, Depends(get_db)], user_id: int):
     tasks = db.scalars(select(Task).where(Task.user_id == user_id)).all()
     if len(tasks) == 0:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='Task with current user_id not found'
         )
@@ -48,7 +48,7 @@ async def task_by_user_id(db: Annotated[Session, Depends(get_db)], user_id: int)
 async def create_task(db: Annotated[Session, Depends(get_db)], create_task: CreateTask, user_id):
     user = db.scalar(select(User).where(User.id == user_id))
     if user is None:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='User not found'
         )
@@ -68,7 +68,7 @@ async def create_task(db: Annotated[Session, Depends(get_db)], create_task: Crea
 async def update_task(db: Annotated[Session, Depends(get_db)], update_task: UpdateTask, id: int):
     task = db.scalar(select(Task).where(Task.id == id))
     if task is None:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='There are no task found'
         )
